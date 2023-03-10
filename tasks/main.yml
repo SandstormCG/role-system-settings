@@ -1,0 +1,40 @@
+---
+#######################################
+##### Load vars for distros
+#######################################
+
+- include_vars: vars/arch.yml
+  when: distro=="arch"
+
+- include_vars: vars/tw.yml
+  when: distro=="tw"
+
+- include_vars: vars/neon.yml
+  when: distro=="neon"
+  
+# tasks file for system-settings
+- name: Configure btrfs & tools
+  include_tasks: btrfs/main.yml
+  when: distro=="arch"
+
+- name: Install gpu drivers
+  include_tasks: gpu_drivers/main.yml
+
+- name: Install & config git
+  include_tasks: git.yml
+
+- name: Configure usb device bindings
+  include_tasks: bindings.yml
+
+- name: Configure certs
+  include_tasks: certs.yml
+
+- name: Configure ssh
+  include_tasks: ssh.yml
+
+- name: Configure KDE plasma with saved desktop config
+  include_tasks: konsave/main.yml
+
+- name: Install codecs (Needed for Opensuse)
+  include_tasks: codecs.yml
+  when: distro=="tw"
